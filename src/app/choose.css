@@ -1,0 +1,393 @@
+/* =========================================
+   WHY CHOOSE US - 3D CINEMATIC SECTION
+========================================= */
+
+.why-section {
+  position: relative;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 100px 25px;
+  perspective: 1200px;
+  overflow: hidden;
+}
+
+/* Ambient lights */
+
+.why-glow {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.why-glow-one {
+  top: 80px;
+  left: -180px;
+  background: rgba(236, 72, 153, 0.18);
+}
+
+.why-glow-two {
+  bottom: 50px;
+  right: -180px;
+  background: rgba(124, 58, 237, 0.2);
+}
+
+/* Header */
+
+.why-header {
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 65px;
+}
+
+.why-header h2 {
+  margin: 18px 0 15px;
+  color: #ffffff;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+}
+
+.why-header h2 span {
+  background: linear-gradient(
+    90deg,
+    #ec4899,
+    #a855f7,
+    #6366f1
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.why-header p {
+  color: #94a3b8;
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+/* Grid */
+
+.why-3d-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  perspective: 1200px;
+}
+
+/* Wrapper */
+
+.why-card-wrapper {
+  transform-style: preserve-3d;
+}
+
+/* Main card */
+
+.why-card {
+  position: relative;
+  min-height: 360px;
+  padding: 30px 25px;
+  overflow: hidden;
+
+  border-radius: 26px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(30, 41, 59, 0.95),
+      rgba(15, 23, 42, 0.92)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(20px);
+
+  transform-style: preserve-3d;
+
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+/* Hover lighting */
+
+.why-card-wrapper:hover .why-card {
+  border-color: rgba(236, 72, 153, 0.45);
+
+  box-shadow:
+    0 35px 70px rgba(0, 0, 0, 0.5),
+    0 0 35px rgba(236, 72, 153, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Top neon line */
+
+.card-top-line {
+  position: absolute;
+  top: 0;
+  left: 12%;
+  width: 76%;
+  height: 2px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #ec4899,
+    #a855f7,
+    transparent
+  );
+
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.7);
+}
+
+/* Number */
+
+.feature-number {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  color: rgba(255, 255, 255, 0.25);
+
+  letter-spacing: 2px;
+}
+
+/* 3D Icon */
+
+.feature-icon-3d {
+  position: relative;
+
+  width: 78px;
+  height: 78px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 28px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(236, 72, 153, 0.22),
+      rgba(124, 58, 237, 0.2)
+    );
+
+  border: 1px solid rgba(236, 72, 153, 0.35);
+
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  transform: translateZ(45px);
+
+  transform-style: preserve-3d;
+}
+
+.feature-icon-3d::before {
+  content: "";
+
+  position: absolute;
+  inset: -8px;
+
+  border-radius: 25px;
+
+  border: 1px solid rgba(168, 85, 247, 0.15);
+
+  transform: translateZ(-10px);
+}
+
+.feature-icon-3d span {
+  font-size: 34px;
+
+  filter:
+    drop-shadow(0 8px 8px rgba(0, 0, 0, 0.4));
+
+  transform: translateZ(25px);
+}
+
+/* Content */
+
+.feature-content {
+  position: relative;
+  z-index: 5;
+
+  transform: translateZ(30px);
+}
+
+.feature-content h3 {
+  margin: 0 0 14px;
+
+  color: #ffffff;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.feature-content p {
+  margin: 0;
+
+  color: #94a3b8;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Footer */
+
+.feature-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 30px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+
+  color: #64748b;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+}
+
+.feature-arrow {
+  color: #ec4899;
+  font-size: 20px;
+
+  transition: transform 0.3s ease;
+}
+
+.why-card-wrapper:hover .feature-arrow {
+  transform: translateX(7px);
+}
+
+/* Decorative orbs */
+
+.card-orb {
+  position: absolute;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  filter: blur(1px);
+}
+
+.orb-one {
+  width: 100px;
+  height: 100px;
+
+  right: -40px;
+  bottom: -40px;
+
+  background: rgba(236, 72, 153, 0.08);
+
+  box-shadow:
+    0 0 50px rgba(236, 72, 153, 0.12);
+}
+
+.orb-two {
+  width: 50px;
+  height: 50px;
+
+  right: 25px;
+  bottom: 70px;
+
+  background: rgba(168, 85, 247, 0.07);
+}
+
+/* Reflection */
+
+.card-reflection {
+  position: absolute;
+
+  left: -20%;
+  bottom: -70%;
+
+  width: 140%;
+  height: 100%;
+
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.025),
+    transparent
+  );
+
+  transform: rotate(-8deg);
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1050px) {
+  .why-3d-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .why-card {
+    min-height: 330px;
+  }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .why-section {
+    padding: 70px 18px;
+  }
+
+  .why-header {
+    margin-bottom: 45px;
+  }
+
+  .why-header h2 {
+    font-size: 2rem;
+  }
+
+  .why-header p {
+    font-size: 14px;
+  }
+
+  .why-3d-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .why-card {
+    min-height: auto;
+    padding: 28px 22px;
+  }
+
+  .feature-icon-3d {
+    width: 70px;
+    height: 70px;
+  }
+
+  .feature-icon-3d span {
+    font-size: 30px;
+  }
+}
