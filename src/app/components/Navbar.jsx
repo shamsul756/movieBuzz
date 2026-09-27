@@ -37,8 +37,8 @@ const Navbar = () => {
         </motion.div>
 
         <div className="logo-text">
-          <span>Movie</span>
-          <strong>Explorer</strong>
+          <span>Cine</span>
+          <strong>Verse</strong>
         </div>
       </Link>
 

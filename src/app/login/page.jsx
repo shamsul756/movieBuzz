@@ -102,7 +102,7 @@ const LoginPage = () => {
             </span>
 
             <h1>
-              Welcome to <span>CineStream</span>
+              Welcome to <span>CineVerse</span>
             </h1>
 
             <p>
