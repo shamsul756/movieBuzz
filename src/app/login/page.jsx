@@ -2,17 +2,80 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import "../login.css"
 
 const LoginPage = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { id, value, type, checked } = e.target;
+    const fieldName = id === "email" ? "email" : id === "password" ? "password" : "rememberMe";
+    setFormData({
+      ...formData,
+      [fieldName]: type === "checkbox" ? checked : value,
+    });
+    setError("");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+    setIsLoading(true);
 
-    // Add your login logic here
-    console.log("Login submitted");
+    // Validation
+    if (!formData.email.trim()) {
+      setError("Please enter your email address");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.password) {
+      setError("Please enter your password");
+      setIsLoading(false);
+      return;
+    }
+
+    // Check credentials against stored users
+    const users = JSON.parse(localStorage.getItem("cineverse_users") || "[]");
+    const user = users.find(
+      (u) => u.email === formData.email && u.password === formData.password
+    );
+
+    if (!user) {
+      setError("Invalid email or password");
+      setIsLoading(false);
+      return;
+    }
+
+    // Save login session
+    localStorage.setItem("cineverse_currentUser", JSON.stringify({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    }));
+
+    if (formData.rememberMe) {
+      localStorage.setItem("cineverse_rememberMe", "true");
+    }
+
+    setSuccess("Login successful! Redirecting to home...");
+
+    // Redirect to home after 1 second
+    setTimeout(() => {
+      router.push("/");
+    }, 1000);
   };
 
   return (
@@ -110,6 +173,46 @@ const LoginPage = () => {
             </p>
           </div>
 
+          {/* Success Message */}
+          {success && (
+            <motion.div
+              className="success-message"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{
+                padding: "12px 16px",
+                borderRadius: "8px",
+                backgroundColor: "#10b981",
+                color: "white",
+                marginBottom: "16px",
+                fontSize: "14px",
+                textAlign: "center",
+              }}
+            >
+              ✓ {success}
+            </motion.div>
+          )}
+
+          {/* Error Message */}
+          {error && (
+            <motion.div
+              className="error-message"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{
+                padding: "12px 16px",
+                borderRadius: "8px",
+                backgroundColor: "#ef4444",
+                color: "white",
+                marginBottom: "16px",
+                fontSize: "14px",
+                textAlign: "center",
+              }}
+            >
+              ✕ {error}
+            </motion.div>
+          )}
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="login-form">
 
@@ -128,6 +231,8 @@ const LoginPage = () => {
                   id="email"
                   type="email"
                   placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -154,6 +259,8 @@ const LoginPage = () => {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
                   required
                 />
 
@@ -177,7 +284,11 @@ const LoginPage = () => {
             {/* Remember */}
             <div className="remember-row">
               <label className="remember-label">
-                <input type="checkbox" />
+                <input 
+                  type="checkbox" 
+                  checked={formData.rememberMe}
+                  onChange={handleChange}
+                />
                 <span className="custom-checkbox"></span>
                 Remember me
               </label>
@@ -186,7 +297,7 @@ const LoginPage = () => {
             {/* Login button */}
             <motion.button
               type="submit"
-             
+              disabled={isLoading}
               className="login-btn"
               whileHover={{
                 scale: 1.02,
@@ -196,7 +307,7 @@ const LoginPage = () => {
                 scale: 0.97,
               }}
             >
-              <span>Sign In</span>
+              <span>{isLoading ? "Signing In..." : "Sign In"}</span>
               <span className="login-arrow">→</span>
             </motion.button>
           </form>

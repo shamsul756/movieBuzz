@@ -2,12 +2,101 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import "../register.css"
 
 const Register = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    agreeTerms: false,
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { id, value, type, checked } = e.target;
+    const fieldName = id === "register-email" ? "email" : id === "register-password" ? "password" : id === "confirm-password" ? "confirmPassword" : id === "name" ? "name" : "agreeTerms";
+    setFormData({
+      ...formData,
+      [fieldName]: type === "checkbox" ? checked : value,
+    });
+    setError("");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setIsLoading(true);
+
+    // Validation
+    if (!formData.name.trim()) {
+      setError("Please enter your full name");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      setError("Please enter your email address");
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.agreeTerms) {
+      setError("Please agree to terms and conditions");
+      setIsLoading(false);
+      return;
+    }
+
+    // Check if email already exists
+    const existingUsers = JSON.parse(localStorage.getItem("cineverse_users") || "[]");
+    const emailExists = existingUsers.some(user => user.email === formData.email);
+
+    if (emailExists) {
+      setError("This email is already registered");
+      setIsLoading(false);
+      return;
+    }
+
+    // Save user to localStorage
+    const newUser = {
+      id: Date.now(),
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      createdAt: new Date().toISOString(),
+    };
+
+    existingUsers.push(newUser);
+    localStorage.setItem("cineverse_users", JSON.stringify(existingUsers));
+
+    setSuccess("Account created successfully! Redirecting to login...");
+    
+    // Redirect to login after 1.5 seconds
+    setTimeout(() => {
+      router.push("/login");
+    }, 1500);
+  };
 
   return (
     <main className="register-page">
@@ -208,9 +297,47 @@ const Register = () => {
                 REGISTER FORM
             ===================================== */}
 
+            {success && (
+              <motion.div
+                className="success-message"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{
+                  padding: "12px 16px",
+                  borderRadius: "8px",
+                  backgroundColor: "#10b981",
+                  color: "white",
+                  marginBottom: "16px",
+                  fontSize: "14px",
+                  textAlign: "center",
+                }}
+              >
+                ✓ {success}
+              </motion.div>
+            )}
+
+            {error && (
+              <motion.div
+                className="error-message"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{
+                  padding: "12px 16px",
+                  borderRadius: "8px",
+                  backgroundColor: "#ef4444",
+                  color: "white",
+                  marginBottom: "16px",
+                  fontSize: "14px",
+                  textAlign: "center",
+                }}
+              >
+                ✕ {error}
+              </motion.div>
+            )}
+
             <form
               className="register-form"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmit}
             >
 
               {/* Name */}
@@ -232,6 +359,8 @@ const Register = () => {
                     type="text"
                     placeholder="Your full name"
                     autoComplete="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     required
                   />
 
@@ -259,6 +388,8 @@ const Register = () => {
                     type="email"
                     placeholder="you@example.com"
                     autoComplete="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                   />
 
@@ -290,6 +421,8 @@ const Register = () => {
                     }
                     placeholder="Create a password"
                     autoComplete="new-password"
+                    value={formData.password}
+                    onChange={handleChange}
                     required
                   />
 
@@ -331,6 +464,8 @@ const Register = () => {
                     }
                     placeholder="Confirm your password"
                     autoComplete="new-password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
                     required
                   />
 
@@ -355,6 +490,8 @@ const Register = () => {
 
                 <input
                   type="checkbox"
+                  checked={formData.agreeTerms}
+                  onChange={handleChange}
                   required
                 />
 
@@ -379,6 +516,7 @@ const Register = () => {
               <motion.button
                 type="submit"
                 className="register-button"
+                disabled={isLoading}
                 whileHover={{
                   scale: 1.02,
                   y: -2,
@@ -387,7 +525,7 @@ const Register = () => {
                   scale: 0.97,
                 }}
               >
-                <span>Create My Account</span>
+                <span>{isLoading ? "Creating Account..." : "Create My Account"}</span>
                 <strong>→</strong>
               </motion.button>
 
